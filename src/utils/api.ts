@@ -1,8 +1,9 @@
 import { Student, Course, PaginationParams, PaginatedResponse, DashboardStats } from '@/types';
 import { toast } from '@/hooks/use-toast';
 
-// API base URL
-const API_BASE_URL = 'http://ec2-34-207-147-146.compute-1.amazonaws.com:8080/api';
+// API base URL - Using protocol-relative URL to avoid mixed content issues when deployed on HTTPS
+// This allows the browser to use the same protocol (HTTP or HTTPS) as the current page
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '//ec2-34-207-147-146.compute-1.amazonaws.com:8080/api';
 
 // Track if a rate limit warning was already shown
 let rateLimitWarningShown = false;
