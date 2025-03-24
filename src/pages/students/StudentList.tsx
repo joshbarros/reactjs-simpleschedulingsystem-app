@@ -7,12 +7,17 @@ import { Loader2, Plus, Edit, Trash, Eye } from 'lucide-react';
 import { Student, Column, PaginatedResponse } from '@/types';
 import { studentApi } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 const StudentList = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [students, setStudents] = useState<Student[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [totalElements, setTotalElements] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   
   // Pagination state
@@ -24,9 +29,10 @@ const StudentList = () => {
 
   // Fetch students with pagination
   const fetchStudents = async (page = 0, size = pageSize, query = '') => {
+    setIsLoading(true);
+    setError(null);
+    setIsRateLimited(false);
     try {
-      setIsLoading(true);
-      
       let data: Student[] | PaginatedResponse<Student>;
       
       if (query) {
@@ -48,11 +54,13 @@ const StudentList = () => {
       }
     } catch (error) {
       console.error('Error fetching students:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load students. Please try again.',
-        variant: 'destructive',
-      });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      setError(errorMessage);
+      
+      // Check if it's a rate limit error
+      if (errorMessage.includes("429") || errorMessage.includes("Too Many Requests")) {
+        setIsRateLimited(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -153,6 +161,17 @@ const StudentList = () => {
           Add Student
         </Button>
       </div>
+
+      {isRateLimited && (
+        <Alert className="mb-6 bg-yellow-100 border-yellow-400 text-yellow-800">
+          <AlertTriangle className="h-4 w-4 text-yellow-800" />
+          <AlertTitle className="text-yellow-800 font-medium">API Rate Limit Reached</AlertTitle>
+          <AlertDescription className="text-yellow-700">
+            The demo API has a request limit. Please wait a moment before trying again. 
+            This is not an application error but a limitation of the demo environment.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="rounded-lg border bg-card p-6">
         <div className="space-y-4">

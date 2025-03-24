@@ -8,6 +8,8 @@ import { Users, BookOpen, Plus, Clock, PieChart, TrendingUp, CheckCircle, Refres
 import { dashboardApi } from '@/utils/api';
 import { DashboardStats } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -15,25 +17,29 @@ const Dashboard = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalStudents: 0,
     totalCourses: 0,
+    studentCourseRatio: '0',
     recentEnrollments: []
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isRateLimited, setIsRateLimited] = useState(false);
 
   const fetchDashboardData = async () => {
+    setIsLoading(true);
+    setError(null);
+    setIsRateLimited(false);
     try {
-      setIsLoading(true);
-      setError(null);
       const data = await dashboardApi.getStats();
       setStats(data);
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      setError('Failed to load dashboard data. Please check your connection or try again later.');
-      toast({
-        title: "API Error",
-        description: "Failed to load dashboard data from the API.",
-        variant: "destructive"
-      });
+      console.error("Error fetching dashboard data:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      setError(errorMessage);
+      
+      // Check if it's a rate limit error
+      if (errorMessage.includes("429") || errorMessage.includes("Too Many Requests")) {
+        setIsRateLimited(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -91,6 +97,17 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {isRateLimited && (
+        <Alert className="my-4 bg-yellow-100 border-yellow-400 text-yellow-800">
+          <AlertTriangle className="h-4 w-4 text-yellow-800" />
+          <AlertTitle className="text-yellow-800 font-medium">API Rate Limit Reached</AlertTitle>
+          <AlertDescription className="text-yellow-700">
+            The demo API has a request limit. Please wait a moment before trying again. 
+            This is not an application error but a limitation of the demo environment.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Stats Section with Glassmorphism Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

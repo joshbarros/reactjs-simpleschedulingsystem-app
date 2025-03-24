@@ -7,12 +7,16 @@ import { Loader2, Plus, Edit, Trash, Eye } from 'lucide-react';
 import { Course, Column } from '@/types';
 import { courseApi } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 const CourseList = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [courses, setCourses] = useState<Course[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isRateLimited, setIsRateLimited] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
 
@@ -22,18 +26,22 @@ const CourseList = () => {
   }, []);
 
   const fetchCourses = async () => {
+    setIsLoading(true);
+    setError(null);
+    setIsRateLimited(false);
     try {
-      setIsLoading(true);
       const data = await courseApi.getAll();
       setCourses(data);
       setFilteredCourses(data);
     } catch (error) {
       console.error('Error fetching courses:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load courses. Please try again.',
-        variant: 'destructive',
-      });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      setError(errorMessage);
+      
+      // Check if it's a rate limit error
+      if (errorMessage.includes("429") || errorMessage.includes("Too Many Requests")) {
+        setIsRateLimited(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -143,6 +151,17 @@ const CourseList = () => {
           Add Course
         </Button>
       </div>
+
+      {isRateLimited && (
+        <Alert className="mb-6 bg-yellow-100 border-yellow-400 text-yellow-800">
+          <AlertTriangle className="h-4 w-4 text-yellow-800" />
+          <AlertTitle className="text-yellow-800 font-medium">API Rate Limit Reached</AlertTitle>
+          <AlertDescription className="text-yellow-700">
+            The demo API has a request limit. Please wait a moment before trying again. 
+            This is not an application error but a limitation of the demo environment.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="rounded-lg border bg-card p-6">
         <div className="space-y-4">
