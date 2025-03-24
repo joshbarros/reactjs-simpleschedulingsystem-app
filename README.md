@@ -4,7 +4,7 @@
   <img src="public/placeholder.svg" alt="Simple Schedule Manager Logo" width="120" />
   <h3 align="center">A modern student and course management system</h3>
   
-  [![Netlify Status](https://api.netlify.com/api/v1/badges/your-netlify-app-id/deploy-status)](https://app.netlify.com/sites/your-netlify-app-name/deploys)
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/simpleschedulingsystem/deploy-status)](https://app.netlify.com/sites/simpleschedulingsystem/deploys)
 </div>
 
 ## 📖 Overview
@@ -199,7 +199,7 @@ The production build will be available in the `dist` directory.
 You can deploy this application to various platforms:
 
 - **Netlify**: Connect your GitHub repository to Netlify for automatic deployments
-  - Quick deploy: [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/joshbarros/reactjs-simpleschedulingsystem-app)
+  - Quick deploy: [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/joshbarros/reactjs-simpleschedulingsystem)
 - **Vercel**: Use the Vercel platform for seamless React application hosting
 - **GitHub Pages**: Deploy static sites directly from your GitHub repository
 - **AWS Amplify**: Host the application on AWS with CI/CD capabilities
