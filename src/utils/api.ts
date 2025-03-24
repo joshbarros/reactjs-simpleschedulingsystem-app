@@ -1,11 +1,33 @@
 import { Student, Course, PaginationParams, PaginatedResponse, DashboardStats } from '@/types';
+import { toast } from '@/hooks/use-toast';
 
 // API base URL
 const API_BASE_URL = 'http://ec2-34-207-147-146.compute-1.amazonaws.com:8080/api';
 
+// Track if a rate limit warning was already shown
+let rateLimitWarningShown = false;
+
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
   return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+};
+
+// Show rate limit warning toast once
+const showRateLimitWarning = () => {
+  if (!rateLimitWarningShown) {
+    toast({
+      title: "API Rate Limit Reached",
+      description: "The demo API has a request limit. Please wait a moment before trying again. This is not an application error.",
+      duration: 8000,
+      variant: "default",
+      className: "bg-yellow-100 border-yellow-400 text-yellow-800",
+    });
+    rateLimitWarningShown = true;
+    // Reset the warning after 30 seconds so it can be shown again if needed
+    setTimeout(() => {
+      rateLimitWarningShown = false;
+    }, 30000);
+  }
 };
 
 // Generic API request function
@@ -38,7 +60,14 @@ async function apiRequest<T>(
     
     const response = await fetch(url, config);
     
-    // Handle non-2xx responses
+    // Handle rate limiting (HTTP 429)
+    if (response.status === 429) {
+      showRateLimitWarning();
+      console.error(`API Rate Limited (${url}): Too many requests`);
+      throw new Error(`API Error: ${response.status} Too Many Requests - Please try again later`);
+    }
+    
+    // Handle other non-2xx responses
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       console.error(`API Error (${url}):`, errorData);
