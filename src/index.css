@@ -1,0 +1,232 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color System */
+    --primary: 231 48% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 100% 32%;
+    --secondary-foreground: 0 0% 100%;
+
+    --tertiary: 187 100% 42%;
+    --tertiary-foreground: 0 0% 100%;
+
+    --background: 0 0% 96%;
+    --foreground: 0 0% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 46%;
+
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 13%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 122 39% 49%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 36 100% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 207 90% 54%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 231 48% 48%;
+
+    /* Fonts */
+    --font-roboto: 'Roboto', sans-serif;
+    --font-poppins: 'Poppins', sans-serif;
+    --font-roboto-mono: 'Roboto Mono', monospace;
+
+    /* Radius */
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    /* Shadows */
+    --shadow-low: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-high: 0 8px 16px rgba(0, 0, 0, 0.14);
+    --shadow-xl: 0 16px 24px rgba(0, 0, 0, 0.16);
+  }
+
+  .dark {
+    /* Dark mode theme colors */
+    --primary: 231 48% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 100% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    --tertiary: 187 100% 52%;
+    --tertiary-foreground: 0 0% 100%;
+
+    /* Dark background */
+    --background: 230 15% 10%;
+    --foreground: 0 0% 96%;
+
+    /* Dark card */
+    --card: 230 15% 15%;
+    --card-foreground: 0 0% 96%;
+
+    /* Dark popover */
+    --popover: 230 15% 15%;
+    --popover-foreground: 0 0% 96%;
+
+    /* Dark muted */
+    --muted: 230 15% 18%;
+    --muted-foreground: 0 0% 64%;
+
+    /* Dark accent */
+    --accent: 230 15% 22%;
+    --accent-foreground: 0 0% 96%;
+
+    /* Other status colors */
+    --destructive: 0 84% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 122 39% 39%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 36 100% 40%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 207 90% 44%;
+    --info-foreground: 0 0% 100%;
+
+    /* Dark borders and inputs */
+    --border: 230 15% 22%;
+    --input: 230 15% 22%;
+    --ring: 231 48% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/50 rounded-full transition-colors hover:bg-muted-foreground/70;
+  }
+  
+  /* Custom focus styles for better accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-medium;
+  }
+  
+  /* Button hover effects */
+  .btn-hover {
+    @apply transition-all duration-300 hover:scale-105;
+  }
+  
+  /* Input focus animation */
+  .input-focus {
+    @apply transition-all duration-300 focus:ring-2 focus:ring-primary/50;
+  }
+  
+  /* Link underline animation */
+  .link-hover {
+    @apply relative inline-block after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100;
+  }
+  
+  /* Table row hover */
+  .table-row-hover {
+    @apply transition-colors duration-200 hover:bg-muted/50;
+  }
+  
+  /* Dialog/modal animation */
+  .dialog-animation {
+    @apply animate-scale-in;
+  }
+  
+  /* Toast/notification animation */
+  .toast-animation {
+    @apply animate-slide-in-right;
+  }
+  
+  /* List item animation */
+  .list-item-animation {
+    @apply animate-fade-in;
+  }
+
+  /* Glassmorphism components */
+  .glass {
+    @apply backdrop-blur-lg border rounded-md shadow-medium transition-all duration-300;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .dark .glass {
+    background: rgba(20, 20, 30, 0.4);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .glass-card {
+    @apply glass p-6;
+  }
+  
+  .glass-input {
+    @apply glass bg-transparent border-0 focus:ring-1 focus:ring-primary/30;
+  }
+}
+
+/* Page transitions */
+.page-transition-enter {
+  @apply opacity-0;
+}
+
+.page-transition-enter-active {
+  @apply opacity-100 transition-opacity duration-300;
+}
+
+.page-transition-exit {
+  @apply opacity-100;
+}
+
+.page-transition-exit-active {
+  @apply opacity-0 transition-opacity duration-300;
+}
