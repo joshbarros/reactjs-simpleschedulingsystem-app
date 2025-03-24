@@ -1,8 +1,10 @@
 # Simple Schedule Manager
 
 <div align="center">
-  <img src="public/logo.svg" alt="Simple Schedule Manager Logo" width="120" />
+  <img src="public/placeholder.svg" alt="Simple Schedule Manager Logo" width="120" />
   <h3 align="center">A modern student and course management system</h3>
+  
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/your-netlify-app-id/deploy-status)](https://app.netlify.com/sites/your-netlify-app-name/deploys)
 </div>
 
 ## 📖 Overview
@@ -197,10 +199,28 @@ The production build will be available in the `dist` directory.
 You can deploy this application to various platforms:
 
 - **Netlify**: Connect your GitHub repository to Netlify for automatic deployments
+  - Quick deploy: [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/joshbarros/reactjs-simpleschedulingsystem-app)
 - **Vercel**: Use the Vercel platform for seamless React application hosting
 - **GitHub Pages**: Deploy static sites directly from your GitHub repository
 - **AWS Amplify**: Host the application on AWS with CI/CD capabilities
 - **Docker**: Containerize the application for deployment on any container orchestration platform
+
+## 📝 Deploying to Netlify
+
+This project is configured for easy deployment to Netlify:
+
+1. Fork or clone this repository to your GitHub account
+2. Sign up for a Netlify account if you don't have one
+3. From the Netlify dashboard, click "New site from Git"
+4. Select GitHub and choose your repository
+5. Configure build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+6. Click "Deploy site"
+
+The application contains a `netlify.toml` configuration that handles:
+- Build settings
+- SPA routing (redirects all routes to index.html)
 
 ## 📄 License
 
